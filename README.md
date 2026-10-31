@@ -17,6 +17,8 @@ Yapay zekâ cevabını düz yazı olarak verir, senin beynin ise dallanarak dü�
 
 ### Claude uygulaması (claude.ai, masaüstü)
 
+Uygulama GitHub'dan kurmuyor, beceri zip olarak yükleniyor.
+
 1. [`dist/zihin-haritasi.zip`](dist/zihin-haritasi.zip) dosyasını indir (açma, zip olarak kalsın).
 2. Ayarlar → Yetenekler bölümünde **Kod çalıştırma ve dosya oluşturma** açık olsun.
 3. Özelleştir → Beceriler → **+** → **Beceri yükle** → zip'i seç.
@@ -24,21 +26,24 @@ Yapay zekâ cevabını düz yazı olarak verir, senin beynin ise dallanarak dü�
 
 Menü adları uygulama sürümüne göre biraz değişebilir.
 
-### Codex (uygulama, CLI, IDE)
-
-```sh
-git clone https://github.com/leodavincs/harita.git
-mkdir -p ~/.agents/skills
-cp -R harita/skills/zihin-haritasi ~/.agents/skills/
-```
-
 ### Claude Code
 
-```sh
-git clone https://github.com/leodavincs/harita.git
-mkdir -p ~/.claude/skills
-cp -R harita/skills/zihin-haritasi ~/.claude/skills/
+Claude Code içinde:
+
 ```
+/plugin marketplace add leodavincs/harita
+/plugin install harita@harita
+```
+
+### Codex (uygulama, CLI, IDE)
+
+Codex'e yaz:
+
+```
+$skill-installer https://github.com/leodavincs/harita/tree/main/skills/zihin-haritasi
+```
+
+Elle kurmak istersen: `skills/zihin-haritasi` klasörünü `~/.agents/skills/` içine kopyala.
 
 ## Nasıl çalışır
 

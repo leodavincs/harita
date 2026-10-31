@@ -18,26 +18,31 @@ Just say "map this", "draw this as a mind map" or "map what we talked about last
 
 ### Claude app (claude.ai, desktop)
 
+The app doesn't install from GitHub; skills are uploaded as a zip.
+
 1. Download [`dist/zihin-haritasi.zip`](dist/zihin-haritasi.zip) (keep it zipped).
 2. In Settings → Capabilities, turn on **Code execution and file creation**.
 3. Customize → Skills → **+** → **Upload a skill** → pick the zip.
 4. In a new chat: "Draw this as a mind map."
 
-### Codex (app, CLI, IDE)
-
-```sh
-git clone https://github.com/leodavincs/harita.git
-mkdir -p ~/.agents/skills
-cp -R harita/skills/zihin-haritasi ~/.agents/skills/
-```
-
 ### Claude Code
 
-```sh
-git clone https://github.com/leodavincs/harita.git
-mkdir -p ~/.claude/skills
-cp -R harita/skills/zihin-haritasi ~/.claude/skills/
+Inside Claude Code:
+
 ```
+/plugin marketplace add leodavincs/harita
+/plugin install harita@harita
+```
+
+### Codex (app, CLI, IDE)
+
+Tell Codex:
+
+```
+$skill-installer https://github.com/leodavincs/harita/tree/main/skills/zihin-haritasi
+```
+
+Manual: copy `skills/zihin-haritasi` into `~/.agents/skills/`.
 
 ## How it works
 

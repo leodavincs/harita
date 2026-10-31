@@ -1,0 +1,12 @@
+{
+  "name": "harita",
+  "description": "Harita: turn any content into an interactive mind map",
+  "owner": { "name": "leodavincs" },
+  "plugins": [
+    {
+      "name": "harita",
+      "source": "./",
+      "description": "Mind map skill: content -> one self-contained HTML map"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "name": "harita",
+  "displayName": "Harita",
+  "version": "0.1.0",
+  "description": "Stop asking AI for reports, ask it for a map. Turns any content into an interactive mind map (one HTML file).",
+  "author": { "name": "leodavincs" },
+  "homepage": "https://github.com/leodavincs/harita",
+  "repository": "https://github.com/leodavincs/harita",
+  "license": "MIT",
+  "keywords": ["mind-map", "zihin-haritasi", "skill", "visualization"]
+}
