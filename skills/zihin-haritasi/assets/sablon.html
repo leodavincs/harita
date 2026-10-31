@@ -891,7 +891,7 @@ function basla(){
   if(window.innerWidth < 700 || ARG.get('gorunum')==='liste') taslakModu(true);
   else {
     ciz(); sigdir(false);
-    if(D.s < 0.75){ // yalnız gerçekten okunmaz küçüklükte merkezden başla; "Sığdır" hepsini gösterir
+    if(D.s < (D.duzen==='zaman' ? 0.5 : 0.75)){ // zaman çizelgesi yana uzar, daha küçük ölçek de okunur; // yalnız gerçekten okunmaz küçüklükte merkezden başla; "Sığdır" hepsini gösterir
       D.s = 1; D.tx = sahne.clientWidth/2 - (KOK.x + KOK.w/2)*D.s; D.ty = sahne.clientHeight/2 - (KOK.y + KOK.h/2)*D.s; uygula(false);
     }
   }
