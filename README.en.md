@@ -10,6 +10,7 @@ Just say "map this", "draw this as a mind map" or "map what we talked about last
 
 - Produces one self-contained HTML file; no internet or install needed.
 - Six layouts: mind map, logic chart, tree, timeline, fishbone, matrix.
+- Save as PDF: page 1 is the map (landscape A4), the next pages hold every detail.
 - Seven themes: white, pastel, paper, dark and three terminal styles; switch from the page.
 - Collapse branches, focus on one branch, present branch by branch, list view on phones.
 - Works in the Claude app, Codex and Claude Code.
@@ -51,6 +52,7 @@ The agent writes the content as a tree (JSON), `scripts/kur.py` validates it and
 
 ```sh
 python3 skills/zihin-haritasi/scripts/kur.py examples/ornek.json --ac
+python3 skills/zihin-haritasi/scripts/kur.py examples/ornek.json --pdf   # also writes a PDF if Chrome/Edge is installed
 ```
 
 ## License

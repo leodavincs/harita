@@ -207,6 +207,25 @@ body.terminal #taslak details:not([open])>summary .ts::after{content:" [+]";colo
 body.terminal #taslak .yorum{white-space:pre-wrap;color:var(--muted);font-size:14.5px}
 body.terminal #taslak .yorum .on{color:var(--line)}
 
+/* ---------- PDF / yazdır: 1. sayfa harita (A4 yatay), sonrası bütün ayrıntılar ---------- */
+@page{size:A4 landscape;margin:10mm}
+body.baski header.ust{width:1047px}
+body.baski #sahne{flex:none;width:1047px;height:600px;background-image:none}
+@media print{
+  html,body{height:auto;overflow:visible}
+  body{display:block;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  header.ust .arac,#yol,#panel,#sunumBar,#sunumNot{display:none !important}
+  header.ust{border-bottom:0;padding:0 0 8px;width:auto}
+  #sahne,body.taslak #sahne{display:block;flex:none;width:277mm;height:158.75mm;background-image:none;break-after:page;contain:paint}
+  #taslak,body.taslak #taslak{display:block !important;overflow:visible;padding:0}
+  #taslak::before{content:"Ayrıntılar";display:block;font:700 18px var(--sans);margin:0 0 10px}
+  #taslak>ul>li>details>ul,#taslak>ul>li>ul{columns:2;column-gap:32px}
+  #taslak summary,#taslak .tnot,#taslak .tbag,#taslak .yorum{break-inside:avoid}
+  #taslak summary{break-after:avoid}
+  #taslak .ts{font-size:13px} #taslak .ts.d1{font-size:15px} #taslak .ts.d0{font-size:17px}
+  #taslak .tnot{font-size:12.5px;padding:6px 10px} #taslak li{margin:4px 0}
+}
+
 @media (max-width:760px){
   header.ust{padding:12px 16px 10px} header.ust h1{font-size:20px}
   .arac .masa{display:none}
@@ -243,6 +262,7 @@ body.terminal #taslak .yorum .on{color:var(--line)}
     </select>
     <button id="taslakDugme" type="button" aria-pressed="false">Liste</button>
     <button id="sunumDugme" type="button" aria-pressed="false" class="masa">Sunum</button>
+    <button id="pdfDugme" type="button">PDF</button>
     <span class="ayrac masa"></span>
     <button id="hepsiAc" type="button">Hepsini aç</button>
     <button id="hepsiKatla" type="button">Katla</button>
@@ -843,11 +863,11 @@ function yenile(){ if(document.body.classList.contains('taslak')) taslakCiz(); e
 
 /* ---------- liste (taslak) görünümü ---------- */
 var tb = document.getElementById('taslakDugme');
-function taslakCiz(){
+function taslakCiz(acik){ // acik: yazdırırken bütün dallar açık
   var kap = document.getElementById('taslak'); kap.innerHTML = '';
   // Terminal temasında liste `tree` çıktısı gibi çizilir: ├── └── │ ve not satırları # yorum.
   function dal(n, d, onek, son){
-    var li = el('li'), satir = el('span','ts d'+Math.min(d,1)); satir.style.setProperty('--c', n.c);
+    var li = el('li'), satir = el('span','ts d'+Math.min(d,2)); // d0 merkez, d1 ana dal, d2 gerisi satir.style.setProperty('--c', n.c);
     var cocukOnek = d===0 ? '' : onek + (son ? '    ' : '│   ');
     if(TERMINAL && d>0) satir.appendChild(el('span','on', onek + (son ? '└── ' : '├── ')));
     isaretler(n, satir); satir.appendChild(document.createTextNode(n.ad));
@@ -871,7 +891,7 @@ function taslakCiz(){
     }
     if(n.alt.length){ var ul2 = el('ul'); n.alt.forEach(function(c,i){ ul2.appendChild(dal(c, d+1, cocukOnek, i===n.alt.length-1)); }); ic.push(ul2); }
     if(ic.length && d>0){
-      var det = el('details'); det.open = !n.kapali; var sm = el('summary'); sm.appendChild(satir); det.appendChild(sm);
+      var det = el('details'); det.open = acik || !n.kapali; var sm = el('summary'); sm.appendChild(satir); det.appendChild(sm);
       ic.forEach(function(x){ det.appendChild(x); }); li.appendChild(det);
     } else { li.appendChild(satir); ic.forEach(function(x){ li.appendChild(x); }); }
     return li;
@@ -925,15 +945,42 @@ function basla(){
   if(window.innerWidth < 700 || ARG.get('gorunum')==='liste') taslakModu(true);
   else {
     ciz(); sigdir(false);
-    if(D.s < (D.duzen==='zaman' ? 0.5 : 0.75)){ // zaman çizelgesi yana uzar, daha küçük ölçek de okunur; // yalnız gerçekten okunmaz küçüklükte merkezden başla; "Sığdır" hepsini gösterir
+    if(D.s < (D.duzen==='zaman' ? 0.5 : 0.75)){ // yalnız gerçekten okunmaz küçüklükte merkezden başla ("Sığdır" hepsini gösterir); zaman çizelgesi yana uzar, daha küçüğü de okunur
       D.s = 1; D.tx = sahne.clientWidth/2 - (KOK.x + KOK.w/2)*D.s; D.ty = sahne.clientHeight/2 - (KOK.y + KOK.h/2)*D.s; uygula(false);
     }
   }
+  if(ARG.get('yazdir')) baskiHazirla(); // kur.py --pdf bu adresle açar
 }
+
+/* ---------- PDF / yazdır ---------- */
+var baskiOnce = null;
+function baskiHazirla(){
+  if(baskiOnce) return;
+  baskiOnce = {taslak: document.body.classList.contains('taslak'), s: D.s, tx: D.tx, ty: D.ty};
+  if(D.sunum) sunumBitir();
+  panelKapat();
+  document.body.classList.remove('taslak'); document.body.classList.add('baski');
+  ciz(); sigdir(false); boy = {w: sahne.clientWidth, h: sahne.clientHeight};
+  // Baskıda ölçek transform yerine zoom ile: tarayıcı küçültülmemiş tuvali sayfa genişliği sanıp bütün PDF'i küçültüyordu.
+  tuval.classList.remove('gecis'); tuval.style.zoom = D.s; tuval.style.transform = 'translate('+(D.tx/D.s)+'px,'+(D.ty/D.s)+'px)';
+  taslakCiz(true);
+}
+function baskiBitir(){
+  if(!baskiOnce) return;
+  var o = baskiOnce; baskiOnce = null;
+  document.body.classList.remove('baski'); tuval.style.zoom = '';
+  if(o.taslak){ document.body.classList.add('taslak'); taslakCiz(); }
+  else { ciz(); D.s = o.s; D.tx = o.tx; D.ty = o.ty; uygula(false); }
+  boy = {w: sahne.clientWidth, h: sahne.clientHeight};
+}
+window.addEventListener('beforeprint', baskiHazirla);
+window.addEventListener('afterprint', baskiBitir);
+document.getElementById('pdfDugme').addEventListener('click', function(){ baskiHazirla(); setTimeout(function(){ window.print(); }, 50); });
 // Pencere boyu değişince ölçek korunur, görünen orta nokta yerinde kalır.
 var boy = {w:sahne.clientWidth, h:sahne.clientHeight};
 window.addEventListener('resize', function(){
   var w = sahne.clientWidth, h = sahne.clientHeight;
+  if(baskiOnce){ boy = {w:w, h:h}; return; }
   if(w && h && boy.w && boy.h){ D.tx += (w - boy.w)/2; D.ty += (h - boy.h)/2; uygula(false); }
   boy = {w:w, h:h};
 });

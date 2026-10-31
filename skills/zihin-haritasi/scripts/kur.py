@@ -5,6 +5,7 @@ Usage:
   python3 kur.py data.json              -> data.html (same folder)
   python3 kur.py data.json -o map.html
   python3 kur.py data.json --ac         -> write and open in the browser
+  python3 kur.py data.json --pdf        -> also write data.pdf (needs Chrome, Chromium or Edge)
 Format: ../references/bicim.md
 """
 from __future__ import annotations
@@ -12,7 +13,10 @@ from __future__ import annotations
 import argparse
 import html
 import json
+import os
 import re
+import shutil
+import subprocess
 import sys
 import webbrowser
 from pathlib import Path
@@ -72,11 +76,41 @@ def kur(v: dict) -> str:
     return sablon.replace("__BASLIK__", html.escape(baslik)).replace("__VERI__", veri)
 
 
+TARAYICILAR = [
+    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+    "/Applications/Chromium.app/Contents/MacOS/Chromium",
+    "/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge",
+    r"C:\Program Files\Google\Chrome\Application\chrome.exe",
+    r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe",
+    r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
+]
+
+
+def tarayici_bul():
+    adaylar = [os.environ.get("CHROME")] + TARAYICILAR
+    adaylar += [shutil.which(a) for a in ("google-chrome", "google-chrome-stable", "chromium", "chromium-browser", "chrome", "msedge")]
+    return next((a for a in adaylar if a and Path(a).exists()), None)
+
+
+def pdf_yaz(sayfa: Path, pdf: Path) -> bool:
+    """Sayfayı başsız tarayıcıyla açar; ?yazdir=1 haritayı A4 yataya sığdırır, ayrıntıları sonraki sayfalara açar."""
+    tarayici = tarayici_bul()
+    if not tarayici:
+        print("PDF için Chrome, Chromium ya da Edge bulunamadı. Sayfayı açıp sağ üstteki PDF düğmesine bas.", file=sys.stderr)
+        return False
+    subprocess.run([tarayici, "--headless=new", "--disable-gpu", "--no-pdf-header-footer",
+                    "--virtual-time-budget=5000", "--window-size=1123,794",
+                    f"--print-to-pdf={pdf}", sayfa.resolve().as_uri() + "?yazdir=1"],
+                   stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=120)
+    return pdf.exists()
+
+
 def main():
     ap = argparse.ArgumentParser(description="Harita verisini HTML'e çevirir")
     ap.add_argument("veri", type=Path)
     ap.add_argument("-o", "--cikti", type=Path)
     ap.add_argument("--ac", action="store_true", help="yazınca tarayıcıda aç")
+    ap.add_argument("--pdf", action="store_true", help="aynı adla PDF de yaz")
     a = ap.parse_args()
     v = oku(a.veri)
     hatalar = denetle(v)
@@ -89,6 +123,8 @@ def main():
     cikti.parent.mkdir(parents=True, exist_ok=True)
     cikti.write_text(kur(v), encoding="utf-8")
     print(cikti)
+    if a.pdf and pdf_yaz(cikti, cikti.with_suffix(".pdf")):
+        print(cikti.with_suffix(".pdf"))
     if a.ac:
         webbrowser.open(cikti.resolve().as_uri())
 

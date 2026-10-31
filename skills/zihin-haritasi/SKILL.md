@@ -55,6 +55,12 @@ python3 scripts/kur.py <data.json> -o <output.html>
 - **Local agents (Codex, Claude Code):** save next to the user's work (or the current folder) and add `--ac` to open it in the browser. Tell the user the file path.
 - Never paste the generated HTML into the chat; it is large. Reply with one or two sentences: what the map shows and where it is.
 
+## PDF
+
+The page has a **PDF** button: page 1 is the map fitted to landscape A4, the following pages list every node with all its details. When the user asks for a PDF:
+- Local agents: add `--pdf` to the build command; it writes `<output>.pdf` next to the HTML using Chrome, Chromium or Edge if installed. If none is found the script says so; then tell the user to open the page and press PDF.
+- Claude app: try `--pdf` too; if the sandbox has no browser, deliver the HTML and tell the user to press the PDF button and choose "Save as PDF".
+
 ## 6. Changes
 
 When the user asks for a change ("merge these two branches", "add a branch for X", "switch to timeline"), edit the same JSON and rebuild to the same output file. Keep `id`s stable so arrows and groups survive.
