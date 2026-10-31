@@ -1,0 +1,70 @@
+{
+  "baslik": "Harita aracı · XMind'dan ne aldık",
+  "tarih": "29 Ekim 2026",
+  "alt": "Düğüme dokun, ayrıntı açılsın. Yuvarlak düğme dalı katlar. Boş yeri sürükle, Ctrl ya da iki parmakla yakınlaş.",
+  "duzen": "harita",
+  "acikDerinlik": 2,
+  "kok": {
+    "id": "kok",
+    "ad": "Bizim harita",
+    "not": "XMind'ın düğüm yapısı, kendi sayfamızda. Yapay zekâ veriyi yazar, tek şablon çizer.",
+    "alt": [
+      {
+        "id": "yapi", "ad": "Yapı", "renk": 1,
+        "not": "XMind'daki gibi her şey bir düğüm: merkez, ana dal, alt dal. Derinlik sınırsız.",
+        "alt": [
+          {"id": "derinlik", "ad": "Sınırsız derinlik", "isaret": ["tamam"], "not": "Dalın içinde dal. Eski haritada 3 kat vardı: merkez, dal, kart."},
+          {"id": "katlama", "ad": "Katlama", "isaret": ["tamam"], "not": ["Dalın yanındaki yuvarlak düğme katlar ya da açar.", "Katlıyken kaç alt dal olduğu yazar.", "Üstteki 'Katla' hepsini ana dala indirir."]},
+          {"id": "not", "ad": "Not ve bağlantı", "isaret": ["tamam"], "not": "Ayrıntısı olan düğümde üç çizgili küçük işaret var. Dokununca sağda panel açılır.", "baglanti": "https://xmind.com/"}
+        ]
+      },
+      {
+        "id": "bag", "ad": "Bağ ve gruplama", "renk": 2,
+        "alt": [
+          {"id": "iliski", "ad": "İlişki oku", "not": "Birbirinden uzak iki fikri kesik okla bağlar, üstüne neden bağlı olduklarını yazar."},
+          {"id": "cerceve", "ad": "Çerçeve", "not": "Birkaç dalı bir kutuya alır, kutuya ad verir."},
+          {"id": "ozet", "ad": "Özet", "not": "Birkaç dalı bir küme parantezle tek sonuca bağlar."},
+          {"id": "isaret", "ad": "İşaretler", "isaret": ["oncelik-1"], "not": ["Öncelik 1-9: numaralı yuvarlak.", "karar senin, kanıt, fikir, uyarı, soru, tamam.", "İlerleme: %40 gibi.", "Renk tek başına anlam taşımaz, hepsinin yazısı var."]}
+        ]
+      },
+      {
+        "id": "duzen", "ad": "Düzenler", "renk": 3,
+        "not": "Üstteki menüden aynı veri altı farklı biçimde çizilir.",
+        "alt": [
+          {"ad": "Zihin haritası", "not": "Merkez ortada, dallar iki yana. Varsayılan."},
+          {"ad": "Mantık şeması", "not": "Hepsi sağa akar. Adım adım akan plan için."},
+          {"ad": "Organizasyon", "not": "Yukarıdan aşağı. Ekip, kadro, sistem parçaları için."},
+          {"id": "zaman", "ad": "Zaman çizelgesi", "isaret": ["fikir"], "not": "Ana dallar soldan sağa bir eksende. Hafta planı için."},
+          {"id": "kilcik", "ad": "Balık kılçığı", "not": "Merkez balığın başı (sorun), ana dallar kemik (neden). 'Bu neden bozuldu' için."},
+          {"ad": "Matris", "not": "Ana dallar satır, alt dallar sütun. Kıyas için."}
+        ]
+      },
+      {
+        "id": "mod", "ad": "Modlar", "renk": 4,
+        "alt": [
+          {"id": "odak", "ad": "Odak", "not": "Bir dalın panelinde 'Bu dala odaklan': harita yalnız o dal olur, üstte geri dönme yolu çıkar. Esc çıkar."},
+          {"id": "sunum", "ad": "Sunum", "not": "Haritayı dal dal gezer. Ok tuşları ya da alttaki düğmeler. Notu altta yazar."},
+          {"id": "liste", "ad": "Liste", "not": "Aynı harita girintili liste olarak. Telefonda kendiliğinden bu açılır."}
+        ]
+      },
+      {
+        "id": "almadik", "ad": "Almadıklarımız", "renk": 8, "kapali": true,
+        "alt": [
+          {"ad": "Düzenleme", "isaret": ["karar"], "not": "Haritayı ekranda sen değiştirmiyorsun. Değişikliği söylersin, yapay zekâ veriyi düzeltir. İstenirse sonra eklenir."},
+          {"ad": ".xmind dosyası", "not": "XMind uygulaması kullanılmayacak (29.10 kararı)."},
+          {"ad": "Gantt, ortak düzenleme", "not": "Bize gerekmiyor."}
+        ]
+      }
+    ]
+  },
+  "iliskiler": [
+    {"kaynak": "katlama", "hedef": "sunum", "etiket": "sunum da katlar"},
+    {"kaynak": "zaman", "hedef": "odak", "etiket": "hafta planında birlikte"}
+  ],
+  "cerceveler": [
+    {"ust": "bag", "aralik": [0, 2], "etiket": "XMind'ın üç bağı"}
+  ],
+  "ozetler": [
+    {"ust": "yapi", "aralik": [0, 2], "ad": "Eski haritanın hepsi + derinlik", "not": "Bu üçü eski haritada da kısmen vardı; yenisi sınırsız iner."}
+  ]
+}
