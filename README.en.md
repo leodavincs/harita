@@ -10,6 +10,7 @@ Just say "map this", "draw this as a mind map" or "map what we talked about last
 
 - Produces one self-contained HTML file; no internet or install needed.
 - Six layouts: mind map, logic chart, tree, timeline, fishbone, matrix.
+- Seven themes: white, pastel, paper, dark and three terminal styles; switch from the page.
 - Collapse branches, focus on one branch, present branch by branch, list view on phones.
 - Works in the Claude app, Codex and Claude Code.
 - The page interface is in Turkish for now; map content follows your language.

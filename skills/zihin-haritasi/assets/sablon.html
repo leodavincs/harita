@@ -143,6 +143,21 @@ body.sunum header.ust .arac>*:not(#sunumDugme){display:none}
 /* merkez ve ana dallar hep büyük harf */
 .dugum.d0 .ad,.dugum.d1 .ad,#taslak .ts.d0,#taslak .ts.d1,.matris thead th:first-child,.matris tbody th .ad{text-transform:uppercase;letter-spacing:.02em}
 
+/* ---------- sade temalar ---------- */
+body[data-tema="beyaz"]{--bg:#ffffff;--dot:#e6e8eb;--ink:#1f2328;--muted:#6e7781;--line:#d0d7de;--card:#ffffff;--card-line:#e1e4e8;--shadow:rgba(31,35,40,.12);--veil:rgba(255,255,255,.92);--copper:#2563eb;--link:#1d4ed8;
+  --d1:#2563eb;--d2:#ea580c;--d3:#7c3aed;--d4:#16a34a;--d5:#db2777;--d6:#0891b2;--d7:#ca8a04;--d8:#64748b;
+  --karar-bg:#fde68a;--karar-ink:#713f12;--kanit-bg:#bbf7d0;--kanit-ink:#14532d;--fikir-bg:#bfdbfe;--fikir-ink:#1e3a8a;--uyari-bg:#fecaca;--uyari-ink:#7f1d1d;
+  --soru-bg:#e9d5ff;--soru-ink:#4c1d95;--tamam-bg:#16a34a;--tamam-ink:#fff;--o1:#dc2626;--o2:#ea580c;--o3:#6e7781}
+body[data-tema="pastel"]{--bg:#fbf9ff;--dot:#ebe5f7;--ink:#3b3550;--muted:#8a83a0;--line:#ddd6ee;--card:#ffffff;--card-line:#e9e3f5;--shadow:rgba(80,60,140,.12);--veil:rgba(251,249,255,.92);--copper:#8b5cf6;--link:#6d28d9;
+  --d1:#f4978e;--d2:#7ec4cf;--d3:#b39ddb;--d4:#9ccc65;--d5:#f6bd60;--d6:#84a59d;--d7:#f28482;--d8:#9fa8da;
+  --karar-bg:#ffe8a3;--karar-ink:#6b4e00;--kanit-bg:#d4f0d0;--kanit-ink:#2d5a27;--fikir-bg:#d6e6ff;--fikir-ink:#24467a;--uyari-bg:#ffd6d1;--uyari-ink:#7a2a20;
+  --soru-bg:#ebdcff;--soru-ink:#4b2a7a;--tamam-bg:#5fa35a;--tamam-ink:#fff;--o1:#e06c5f;--o2:#e8a33d;--o3:#8a83a0}
+body[data-tema="koyu"]{--bg:#18181b;--dot:#27272a;--ink:#f4f4f5;--muted:#a1a1aa;--line:#3f3f46;--card:#202024;--card-line:#3f3f46;--shadow:rgba(0,0,0,.5);--veil:rgba(24,24,27,.92);--copper:#60a5fa;--link:#93c5fd;
+  --d1:#60a5fa;--d2:#fb923c;--d3:#a78bfa;--d4:#4ade80;--d5:#f472b6;--d6:#22d3ee;--d7:#facc15;--d8:#94a3b8;
+  --karar-bg:#713f12;--karar-ink:#fde68a;--kanit-bg:#14532d;--kanit-ink:#bbf7d0;--fikir-bg:#1e3a8a;--fikir-ink:#bfdbfe;--uyari-bg:#7f1d1d;--uyari-ink:#fecaca;
+  --soru-bg:#4c1d95;--soru-ink:#e9d5ff;--tamam-bg:#16a34a;--tamam-ink:#fff;--o1:#f87171;--o2:#fb923c;--o3:#a1a1aa}
+#temaSec{min-width:0}
+
 /* ---------- terminal temaları ---------- */
 body[data-tema="fosfor"]{--bg:#050a06;--dot:#0f1f12;--ink:#a8f0b8;--muted:#4f7d5a;--line:#1c3322;--card:#08120a;--card-line:#1c3322;--shadow:rgba(0,0,0,.7);--copper:#3dff7a;--link:#3dff7a;
   --d1:#3dff7a;--d2:#9dffbf;--d3:#5fd47f;--d4:#c8ffd8;--d5:#2fbf63;--d6:#7dffa8;--d7:#b0f5c0;--d8:#4f9d63;
@@ -217,6 +232,15 @@ body.terminal #taslak .yorum .on{color:var(--line)}
       <option value="kilcik">Balık kılçığı</option>
       <option value="matris">Matris</option>
     </select>
+    <select id="temaSec" aria-label="Tema">
+      <option value="beyaz">Beyaz</option>
+      <option value="pastel">Pastel</option>
+      <option value="kagit">Kağıt</option>
+      <option value="koyu">Koyu</option>
+      <option value="gece">Terminal</option>
+      <option value="fosfor">Fosfor</option>
+      <option value="amber">Amber</option>
+    </select>
     <button id="taslakDugme" type="button" aria-pressed="false">Liste</button>
     <button id="sunumDugme" type="button" aria-pressed="false" class="masa">Sunum</button>
     <span class="ayrac masa"></span>
@@ -267,9 +291,17 @@ function eskidenCevir(h){
 }
 var V = HAM.kok ? HAM : eskidenCevir(HAM);
 var ARG = new URLSearchParams(location.search);
-var TEMA = ARG.get('tema') || V.tema || 'gece'; // varsayılan: gece (modern terminal)
-var TERMINAL = TEMA !== 'kagit';
-document.body.dataset.tema = TEMA; document.body.classList.toggle('terminal', TERMINAL);
+// Tema sırası: adres (?tema=) > izleyicinin son seçimi > veride yazan > beyaz.
+var TEMALAR = ['beyaz','pastel','kagit','koyu','gece','fosfor','amber'];
+var TERMINAL_TEMA = {gece:1, fosfor:1, amber:1};
+function temaHafiza(yeni){ try { if(yeni) localStorage.setItem('harita-tema', yeni); return localStorage.getItem('harita-tema'); } catch(e){ return null; } }
+var TEMA = [ARG.get('tema'), temaHafiza(), V.tema, 'beyaz'].filter(function(x){ return TEMALAR.indexOf(x) >= 0; })[0];
+var TERMINAL;
+function temaKur(t){
+  TEMA = t; TERMINAL = !!TERMINAL_TEMA[t];
+  document.body.dataset.tema = t; document.body.classList.toggle('terminal', TERMINAL);
+}
+temaKur(TEMA);
 var DUGUM = {}, SIRA = [], sayac = 0;
 function hazirla(n, ust, derin, renk){
   n.id = n.id || ('n'+(++sayac)); n.ust = ust; n.derin = derin; n.alt = n.alt || [];
@@ -800,6 +832,8 @@ document.getElementById('pKapat').addEventListener('click', panelKapat);
 document.getElementById('pOdak').addEventListener('click', function(){ if(D.secili) odakla(D.secili); });
 document.getElementById('pKat').addEventListener('click', function(){ var n = DUGUM[D.secili]; if(n) katla(n); });
 sec.addEventListener('change', function(){ D.duzen = sec.value; ciz(); sigdir(true); });
+var temaSec = document.getElementById('temaSec'); temaSec.value = TEMA;
+temaSec.addEventListener('change', function(){ temaKur(temaSec.value); temaHafiza(temaSec.value); yenile(); });
 document.getElementById('hepsiAc').addEventListener('click', function(){ SIRA.forEach(function(n){ n.kapali = false; }); yenile(); });
 document.getElementById('hepsiKatla').addEventListener('click', function(){ SIRA.forEach(function(n){ n.kapali = n.derin>=1 && n.alt.length>0; }); yenile(); });
 document.getElementById('yakin').addEventListener('click', function(){ yakinlas(1.25); });

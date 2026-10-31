@@ -38,6 +38,7 @@ Rules that make a good map:
 - Root `not`: the one-sentence answer or conclusion, so the map is useful even without clicking.
 - Use `isaret` markers sparingly: `karar` (a decision for the user), `kanit` (evidence), `fikir`, `uyari`, `soru`, `tamam`, `oncelik-1`…`oncelik-9`.
 - Add `iliskiler` (arrows between distant nodes) only when the link is the point.
+- Theme: leave `tema` out (default `beyaz`, clean white) unless the user asks for a look: `pastel` (soft, friendly), `kagit` (warm paper), `koyu` (dark), `gece` / `fosfor` / `amber` (terminal style). The viewer can also switch theme on the page; their choice is remembered.
 
 ## 4. Build the page
 

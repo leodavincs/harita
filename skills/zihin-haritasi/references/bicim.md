@@ -50,6 +50,6 @@ One JSON object. Keys are Turkish; write them exactly as below. Text values are 
 | `cerceveler` | a box around some children of `ust`; `aralik` = [first, last] child index, 0-based, both included; omit for all |
 | `ozetler` | a brace joining some children of `ust` into one conclusion (`ad`, optional `not`) |
 
-The page itself lets the viewer switch layout and theme, collapse branches, focus on one branch, present branch by branch, and read it as a list (automatic on phones). Themes: `gece` (default, dark), `kagit`, `fosfor`, `amber` via `"tema"` or `?tema=` in the URL.
+The page itself lets the viewer switch layout and theme, collapse branches, focus on one branch, present branch by branch, and read it as a list (automatic on phones). Themes, set with `"tema"` or `?tema=` in the URL: `beyaz` (default, clean white), `pastel`, `kagit` (warm paper), `koyu` (dark), and three terminal styles `gece`, `fosfor`, `amber`. The page also has a theme picker; the viewer's last choice is remembered on their device and wins over `"tema"` (the URL wins over both).
 
 `scripts/kur.py` stops on unknown ids, bad ranges and unknown layouts and prints what is wrong.

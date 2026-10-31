@@ -10,6 +10,7 @@ Yapay zekâ cevabını düz yazı olarak verir, senin beynin ise dallanarak dü�
 
 - Tek dosyalık HTML sayfası üretir; internet bağlantısı ya da kurulum gerekmez.
 - Altı düzen: zihin haritası, mantık şeması, ağaç, zaman çizelgesi, balık kılçığı, matris.
+- Yedi tema: beyaz, pastel, kağıt, koyu ve üç terminal teması. Sayfadan tek tıkla değişir.
 - Dalları katlama, tek dala odaklanma, dal dal sunum, telefonda liste görünümü.
 - Claude uygulamasında, Codex'te ve Claude Code'da çalışır.
 
